@@ -12,6 +12,7 @@ else:
     print(matrix)
 """
 
+"""
 import numpy as np
 import pandas as pd
 data = {
@@ -24,3 +25,20 @@ print("DataFrame is: \n")
 print(df)
 matrix = df.corr()
 print(matrix)
+
+"""
+
+
+import numpy as np
+from sklearn import datasets
+import pandas as pd
+data = datasets.load_iris()
+df = pd.DataFrame(data = data.data, columns = data.feature_names)
+df['target'] = data.target
+corr_matrix = df.drop(columns='target').corr()
+print("Correlation Matrix:\n", corr_matrix)
+corr_unstacked = corr_matrix.abs().unstack()
+corr_unstacked = corr_unstacked[corr_unstacked < 1]  # remove diagonal/self correlations
+max_corr_pair = corr_unstacked.idxmax()
+max_corr_value = corr_unstacked.max()
+print(f"\nMost highly correlated features: {max_corr_pair} with correlation {max_corr_value:.3f}")
